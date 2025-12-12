@@ -8,6 +8,23 @@
 
 ---
 
+### Greedy A* Simulation
+
+<p align="center">
+
+https://github.com/user-attachments/assets/4e2e57df-476a-4cd4-823d-b39de203e69a
+
+</p>
+
+### SCoBA + PM-CBS Simulation
+
+<p align="center">
+
+https://github.com/user-attachments/assets/7b9f9981-e7d4-4664-9835-58cc0af2d1e9
+
+</p>
+
+
 ## Overview
 
 This repository implements an end-to-end multi-robot coordination system for
@@ -269,29 +286,6 @@ LiDAR is used for state correction and validation, not for replanning.
 - Tabular Q-learning over tasks.
 - Sparse rewards and no safety constraints.
 - Included as a learning-based comparison baseline.
-
----
-
-## Qualitative Results
-
-### Greedy A* Simulation
-
-<p align="center">
-
-
-https://github.com/user-attachments/assets/8016ee17-667a-4193-b20a-91fd44fb557e
-
-</p>
-
-### SCoBA + PM-CBS Simulation
-
-<p align="center">
-
-
-https://github.com/user-attachments/assets/7e656fac-e0e4-4a27-89ff-b06bac2ace46
-
-
-</p>
 
 ---
 
