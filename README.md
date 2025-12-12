@@ -69,12 +69,12 @@ $$
 
 Each robot follows a unicycle kinematic model.
 
-**State**  
+**State**
 $
 \mathbf{x}_i = (x_i, y_i, \theta_i)
 $
 
-**Control**  
+**Control**
 $
 \mathbf{u}_i = (v_i, \omega_i)
 $
@@ -295,28 +295,33 @@ LiDAR is used for state correction and validation, not for replanning.
 
 We report the following metrics:
 
-- **Tasks Completed**
+**Tasks Completed**
+
 $$
 C = |\mathcal{T}_{\text{succ}}|
 $$
 
-- **Total Utility**
+**Total Utility**
+
 $$
 U_{\text{tot}} = \sum_{j \in \mathcal{T}_{\text{succ}}} u_j
 $$
 
-- **Total Distance Travelled**
+**Total Distance Travelled**
+
 $$
 D = \sum_i \int_0^T |v_i(t)| \, dt
 $$
 
-- **Utility Efficiency**
+**Utility Efficiency**
+
 $$
 \eta_d = \frac{U_{\text{tot}}}{D}, \qquad
 \eta_s = \frac{U_{\text{tot}}}{\text{steps}}
 $$
 
-- **Collision Count**
+**Collision Count**
+
 
 ---
 
@@ -338,12 +343,12 @@ $$
 
 ## References
 
-- Scott Fredriksson, Yifan Bai, Akshit Saradagi, and George Nikolakopoulos.  
+- Scott Fredriksson, Yifan Bai, Akshit Saradagi, and George Nikolakopoulos.
   *Multi-Agent Path Finding Using Conflict-Based Search and Structural-Semantic
   Topometric Maps*. arXiv:2501.17661, 2025.
 
 - Shushman Choudhury, Jayesh K. Gupta, Mykel J. Kochenderfer, Dorsa Sadigh, and
-  Jeannette Bohg.  
+  Jeannette Bohg.
   *Dynamic Multi-Robot Task Allocation under Uncertainty and Temporal
   Constraints*. arXiv:2005.13109, 2020.
 
