@@ -1,9 +1,10 @@
+
 # Stochastic Utility-Aware Multi-Robot Task Allocation with Topometric CBS
 
-> **From-scratch Python implementation of a unified MRTA–MAPF–Estimation framework**
-> combining stochastic utility-based task allocation (SCoBA-inspired),
-> conflict-free multi-agent path finding via topometric PM-CBS,
-> and uncertainty-aware continuous execution using EKF localization.
+**From-scratch Python implementation of a unified MRTA–MAPF–Estimation framework**
+combining stochastic utility-aware task allocation (SCoBA-inspired),
+conflict-free multi-agent path finding using topometric PM-CBS,
+and uncertainty-aware continuous execution with EKF localization.
 
 ---
 
@@ -13,27 +14,19 @@ This repository implements an end-to-end multi-robot coordination system for
 warehouse-like environments, where multiple mobile robots must execute
 time-constrained service tasks safely and efficiently in a shared workspace.
 
-The core challenge addressed is the **tight coupling of three traditionally
-separate problems**:
+The core challenge addressed is the tight coupling of three traditionally
+separate problems:
 
-1. **Multi-Robot Task Allocation (MRTA)** under deadlines, travel costs, and
-   heterogeneous utilities.
-2. **Multi-Agent Path Finding (MAPF)** with strict collision-avoidance guarantees
-   in narrow, shared regions.
-3. **Execution under uncertainty**, where robots follow planned trajectories
-   using noisy sensing and localization.
+- Multi-Robot Task Allocation (MRTA) under deadlines, travel costs, and
+  heterogeneous utilities.
+- Multi-Agent Path Finding (MAPF) with strict collision-avoidance guarantees
+  in narrow, shared regions.
+- Execution under uncertainty, where robots follow planned trajectories using
+  noisy sensing and localization.
 
 To address this, we implement a principled pipeline:
 
-\[
-\text{SCoBA Allocation}
-\;\rightarrow\;
-\text{Topometric PM-CBS}
-\;\rightarrow\;
-\text{Grid A* Refinement}
-\;\rightarrow\;
-\text{Continuous Execution + EKF}
-\]
+[ SCoBA Allocation → Topometric PM-CBS → Grid A* Refinement → Continuous Execution + EKF ]
 
 The system is fully self-contained, uses no ROS/Gazebo dependencies, and is
 designed to support fair comparisons against greedy and learning-based baselines.
@@ -45,14 +38,12 @@ designed to support fair comparisons against greedy and learning-based baselines
 The workspace is a 2D warehouse represented as an occupancy grid with obstacles
 (shelves, walls) and free corridors.
 
-Robots operate in continuous space but plan over an **inflated grid** to ensure
+Robots operate in continuous space but plan over an inflated grid to ensure
 safety margins.
 
-Each free grid cell \((x, y)\) corresponds to a continuous position:
+Each free grid cell (x, y) corresponds to a continuous position:
 
-\[
-p = (x + 0.5,\; y + 0.5)^\top
-\]
+[ p = (x + 0.5, y + 0.5)^T ]
 
 ### Environment Map
 
@@ -69,26 +60,21 @@ p = (x + 0.5,\; y + 0.5)^\top
 Each robot follows a unicycle kinematic model.
 
 **State**
-\[
-\mathbf{x}_i = (x_i, y_i, \theta_i)
-\]
+[ x_i = (x_i, y_i, θ_i) ]
 
 **Control**
-\[
-\mathbf{u}_i = (v_i, \omega_i)
-\]
+[ u_i = (v_i, ω_i) ]
 
 **Discrete-Time Dynamics**
-\[
-\begin{align}
-x_i(t+1) &= x_i(t) + v_i(t) \cos\theta_i(t) \Delta t \\
-y_i(t+1) &= y_i(t) + v_i(t) \sin\theta_i(t) \Delta t \\
-\theta_i(t+1) &= \theta_i(t) + \omega_i(t) \Delta t
-\end{align}
-\]
+
+[
+x_i(t+1) = x_i(t) + v_i(t) · cos(θ_i(t)) · Δt  
+y_i(t+1) = y_i(t) + v_i(t) · sin(θ_i(t)) · Δt  
+θ_i(t+1) = θ_i(t) + ω_i(t) · Δt
+]
 
 Velocity and angular rates are bounded. Collisions with obstacles are detected
-using the inflated grid; on collision, robots revert to their previous pose.
+using the inflated grid; upon collision, robots revert to their previous pose.
 
 ---
 
@@ -96,23 +82,19 @@ using the inflated grid; on collision, robots revert to their previous pose.
 
 The environment issues a set of service tasks:
 
-\[
-T = \{T_1, T_2, \dots, T_M\}
-\]
+[ T = {T_1, T_2, …, T_M} ]
 
 Each task is defined as:
 
-\[
-T_j = (p_j,\; r_j,\; d_j,\; \Delta_j,\; u_j)
-\]
+[ T_j = (p_j, r_j, d_j, Δ_j, u_j) ]
 
 where:
-- \(p_j\) is the task location,
-- \([r_j, d_j]\) is a hard time window,
-- \(\Delta_j\) is the service duration,
-- \(u_j\) is the task utility.
+- p_j is the task location,
+- [r_j, d_j] is a hard time window,
+- Δ_j is the service duration,
+- u_j is the task utility.
 
-A task contributes utility **at most once**, even if multiple robots attempt it.
+A task contributes utility at most once, even if multiple robots attempt it.
 
 ---
 
@@ -125,27 +107,21 @@ by the SCoBA framework.
 
 Travel time between locations is estimated using grid-based A* search:
 
-\[
-\tau(p_a, p_b)
-\]
+[ τ(p_a, p_b) ]
 
 ### Success Probability
 
-Each task is assigned a bounded success probability
-\(p_j \in [0, 1]\) that decreases with:
-- late arrival relative to the deadline,
-- excessive travel time.
+Each task is assigned a bounded success probability p_j in [0, 1], which
+decreases with late arrival relative to the deadline and excessive travel time.
 
 ### Expected Utility
 
-\[
-\mathbb{E}[U_j] = p_j u_j
-\]
+[ E[U_j] = p_j · u_j ]
 
-Each robot constructs a feasible task sequence maximizing cumulative expected
-utility subject to time-window constraints.
+Each robot constructs a feasible task sequence that maximizes cumulative
+expected utility subject to time-window constraints.
 
-To avoid duplicate assignments, a **CBS-style branching mechanism** is used at
+To avoid duplicate assignments, a CBS-style branching mechanism is applied at
 the allocation level: when two robots select the same task, two branches are
 created, forbidding that task for one robot in each branch.
 
@@ -156,18 +132,14 @@ created, forbidding that task for one robot in each branch.
 To enable scalable multi-agent planning, the inflated grid is decomposed into
 connected free-space regions:
 
-\[
-R = \{R_1, R_2, \dots, R_K\}
-\]
+[ R = {R_1, R_2, …, R_K} ]
 
-Adjacency between regions defines a **topometric graph**:
+Adjacency between regions defines a topometric graph:
 
-\[
-G_{\text{topo}} = (R, E)
-\]
+[ G_topo = (R, E) ]
 
-Each region acts as a shared resource that cannot be occupied by multiple robots
-during overlapping time intervals.
+Each region is treated as a shared resource that cannot be occupied by multiple
+robots during overlapping time intervals.
 
 ### Topometric Graph Visualization
 
@@ -181,48 +153,42 @@ during overlapping time intervals.
 
 ## Priority-Based Multi-Agent CBS (PM-CBS)
 
-Given robot start regions and goal regions (from allocated tasks), we apply
-**PM-CBS** at the region-time level.
+Given robot start regions and goal regions (from allocated tasks), planning is
+performed using Priority-Based Multi-Agent Conflict-Based Search (PM-CBS) at
+the region-time level.
 
 ### Region-Time Plans
 
-For robot \(i\), a plan is a sequence:
+For robot i, a plan is a sequence of tuples:
 
-\[
-(R_{i1}, t_{i1}^{in}, t_{i1}^{out}), \dots
-\]
+[ (R_i1, t_i1_in, t_i1_out), (R_i2, t_i2_in, t_i2_out), … ]
 
 ### Conflict Definition
 
-A conflict occurs if two robots occupy the same region during overlapping
+A conflict occurs if two robots occupy the same region during overlapping time
 intervals:
 
-\[
-[t_{i,k}^{in}, t_{i,k}^{out}] \cap
-[t_{j,\ell}^{in}, t_{j,\ell}^{out}] \neq \emptyset
-\]
+[ [t_i_k_in, t_i_k_out] ∩ [t_j_l_in, t_j_l_out] ≠ ∅ ]
 
 ### CBS Branching
 
 When a conflict is detected, two branches are generated:
-- forbid the region-time interval for robot \(i\), or
-- forbid it for robot \(j\).
+- forbid the conflicting region-time interval for robot i, or
+- forbid it for robot j.
 
-Only the affected robot is replanned in each branch.
-
-This guarantees **collision-free region-level coordination**.
+Only the affected robot is replanned in each branch, ensuring collision-free
+coordination at the region level.
 
 ---
 
 ## Grid-Level Path Refinement
 
-Each region-level plan is refined into a dense, executable path using grid A*.
+Each region-level plan is refined into a dense, executable path using grid A*
+search between representative cells of consecutive regions.
 
 Waypoints are generated as continuous positions:
 
-\[
-w_k = (x_k + 0.5,\; y_k + 0.5)
-\]
+[ w_k = (x_k + 0.5, y_k + 0.5) ]
 
 This stage ensures geometric feasibility without reintroducing inter-robot
 conflicts.
@@ -236,16 +202,14 @@ belief over their state using an Extended Kalman Filter (EKF).
 
 ### EKF Prediction
 
-\[
-\mu^- = f(\mu, u), \quad P^- = F P F^\top + Q
-\]
+[ μ⁻ = f(μ, u),   P⁻ = F · P · F^T + Q ]
 
 ### Measurement Updates
 
-- **GPS-like position updates** (noisy but frequent)
-- **Selective LiDAR range updates** using a conservative beam model
+- Noisy GPS-like position updates
+- Selective LiDAR range updates using a conservative beam model
 
-LiDAR is used for **state correction and validation**, not for replanning.
+LiDAR is used for state correction and validation, not for replanning.
 
 ---
 
@@ -254,14 +218,14 @@ LiDAR is used for **state correction and validation**, not for replanning.
 ### Greedy A*
 
 - Each robot repeatedly selects the nearest unfinished task.
-- Plans independently using grid A*.
+- Paths are planned independently using grid A*.
 - No coordination or collision avoidance between robots.
 
 ### Reinforcement Learning Baseline
 
 - Tabular Q-learning over tasks.
 - Sparse rewards and no safety constraints.
-- Serves as a learning-based comparison point.
+- Included as a learning-based comparison baseline.
 
 ---
 
@@ -287,30 +251,21 @@ LiDAR is used for **state correction and validation**, not for replanning.
 
 ## Evaluation Metrics
 
-We report:
+We report the following metrics:
 
-- **Tasks Completed**
-\[
-C = |T_{succ}|
-\]
+- Tasks Completed:  
+  [ C = |T_succ| ]
 
-- **Total Utility**
-\[
-U_{tot} = \sum_{j \in T_{succ}} u_j
-\]
+- Total Utility:  
+  [ U_tot = sum_{j in T_succ} u_j ]
 
-- **Total Distance**
-\[
-D = \sum_i \int_0^T |v_i(t)| dt
-\]
+- Total Distance Travelled:  
+  [ D = sum_i ∫ |v_i(t)| dt ]
 
-- **Utility Efficiency**
-\[
-\eta_d = \frac{U_{tot}}{D}, \quad
-\eta_s = \frac{U_{tot}}{\text{steps}}
-\]
+- Utility Efficiency:  
+  [ η_d = U_tot / D,   η_s = U_tot / steps ]
 
-- **Collision Count**
+- Collision Count
 
 ---
 
@@ -332,15 +287,15 @@ D = \sum_i \int_0^T |v_i(t)| dt
 
 ## References
 
-- Scott Fredriksson, Yifan Bai, Akshit Saradagi, and George Nikolakopoulos.
-  *Multi-Agent Path Finding Using Conflict-Based Search and Structural-Semantic
-  Topometric Maps*, arXiv:2501.17661, 2025.
+- Scott Fredriksson, Yifan Bai, Akshit Saradagi, and George Nikolakopoulos.  
+  Multi-Agent Path Finding Using Conflict-Based Search and Structural-Semantic
+  Topometric Maps. arXiv:2501.17661, 2025.
 
 - Shushman Choudhury, Jayesh K. Gupta, Mykel J. Kochenderfer, Dorsa Sadigh, and
-  Jeannette Bohg.
-  *Dynamic Multi-Robot Task Allocation under Uncertainty and Temporal
-  Constraints*, arXiv:2005.13109, 2020.
+  Jeannette Bohg.  
+  Dynamic Multi-Robot Task Allocation under Uncertainty and Temporal
+  Constraints. arXiv:2005.13109, 2020.
 
 ---
 
-**Research / educational use only.**
+Research / educational use only.
