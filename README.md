@@ -59,7 +59,7 @@ $$
 
 <p align="center">
 
-
+<img width="2400" height="2400" alt="map_overview" src="https://github.com/user-attachments/assets/c81c41ec-8ec8-473a-af7b-297d318afc73" />
 
 </p>
 
@@ -173,6 +173,7 @@ robots during overlapping time intervals.
 
 <p align="center">
 
+<img width="1204" height="1258" alt="topometric_graph" src="https://github.com/user-attachments/assets/02a24757-1808-4b8f-a7e3-d0c6cc0ebec7" />
 
 
 </p>
@@ -278,6 +279,7 @@ LiDAR is used for state correction and validation, not for replanning.
 <p align="center">
 
 
+https://github.com/user-attachments/assets/8016ee17-667a-4193-b20a-91fd44fb557e
 
 </p>
 
@@ -285,6 +287,8 @@ LiDAR is used for state correction and validation, not for replanning.
 
 <p align="center">
 
+
+https://github.com/user-attachments/assets/7e656fac-e0e4-4a27-89ff-b06bac2ace46
 
 
 </p>
