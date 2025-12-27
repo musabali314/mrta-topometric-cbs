@@ -12,7 +12,7 @@
 
 <p align="center">
   <video
-    src="https://github.com/user-attachments/assets/4e2e57df-476a-4cd4-823d-b39de203e69a"
+    src="https://github.com/user-attachments/assets/fd61c983-cea8-4056-88d6-29150b250841"
     width="80%"
     controls
     muted
@@ -24,7 +24,7 @@
 
 <p align="center">
   <video
-    src="https://github.com/user-attachments/assets/7b9f9981-e7d4-4664-9835-58cc0af2d1e9"
+    src="https://github.com/user-attachments/assets/9be5d410-3d77-4fd3-8bdf-12a8436779fe"
     width="80%"
     controls
     muted
