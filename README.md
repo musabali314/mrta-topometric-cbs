@@ -11,19 +11,26 @@
 ### Greedy A* Simulation
 
 <p align="center">
-
-https://github.com/user-attachments/assets/4e2e57df-476a-4cd4-823d-b39de203e69a
-
+  <video
+    src="https://github.com/user-attachments/assets/4e2e57df-476a-4cd4-823d-b39de203e69a"
+    width="80%"
+    controls
+    muted
+    playsinline>
+  </video>
 </p>
 
 ### SCoBA + PM-CBS Simulation
 
 <p align="center">
-
-https://github.com/user-attachments/assets/7b9f9981-e7d4-4664-9835-58cc0af2d1e9
-
+  <video
+    src="https://github.com/user-attachments/assets/7b9f9981-e7d4-4664-9835-58cc0af2d1e9"
+    width="80%"
+    controls
+    muted
+    playsinline>
+  </video>
 </p>
-
 
 ## Overview
 
