@@ -50,15 +50,7 @@ separate problems:
 
 To address this, we implement a principled pipeline:
 
-$$
-\text{SCoBA Allocation}
-\;\rightarrow\;
-\text{Topometric PM-CBS}
-\;\rightarrow\;
-\text{Grid A* Refinement}
-\;\rightarrow\;
-\text{Continuous Execution + EKF}
-$$
+**SCoBA Allocation → Topometric PM-CBS → Grid A\* Refinement → Continuous Execution + EKF**
 
 The system is fully self-contained, uses no ROS/Gazebo dependencies, and is
 designed to support fair comparisons against greedy and learning-based baselines.
@@ -93,15 +85,8 @@ $$
 
 Each robot follows a unicycle kinematic model.
 
-**State**
-$
-\mathbf{x}_i = (x_i, y_i, \theta_i)
-$
-
-**Control**
-$
-\mathbf{u}_i = (v_i, \omega_i)
-$
+- **State:** \( \mathbf{x}_i = (x_i,\; y_i,\; \theta_i) \)
+- **Control:** \( \mathbf{u}_i = (v_i,\; \omega_i) \)
 
 **Discrete-Time Dynamics**
 
@@ -151,9 +136,9 @@ by the SCoBA framework.
 
 Travel time between locations is estimated using grid-based A* search:
 
-$
+\[
 \tau(p_a, p_b)
-$
+\]
 
 ### Success Probability
 
